@@ -1,0 +1,63 @@
+/*******************************************************
+DIL6 - Infra dálkový ovladač
+Tento program testuje INFRA přijímač a dálkový ovladač KEYES
+úprava © Aleš Müller, Březen 2014,
+Verze 2
+********************************************************/
+//použitá knihovna
+#include "IRremote.h"
+ 
+int receiver = 19; // pin 1 na IR přijímači na Arduino digital pin 19 (Arduino MEGA), pro UNO musíte upravit.
+IRrecv irrecv(receiver);           // vytvoříme instanci 'irrecv'
+decode_results results;            // vytvoříme instanci 'decode_results'
+ 
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println("www.santy.cz");
+  Serial.println("Dil 6 - Infra cidlo dalkovy ovladac");  
+  irrecv.enableIRIn(); // Start přijímače
+ 
+  pinMode(53, OUTPUT);
+}
+ 
+void loop()
+{
+  if (irrecv.decode(&results)) // přijmul přijímač nějaký IR signál?
+  {
+//    Serial.println(results.value, HEX);  // odkomentujte, chcete li vidět přímo přijatý signál, vhodné pro neznámé vysílače, TV apod.
+    translateIR();
+    irrecv.resume(); // a přijímáme další hodnoty
+  }  
+}
+ 
+/*-----( Deklarace uživatelských funkcí )-----*/
+void translateIR()
+// popis pro KEYES dálkový ovladač - IR kódy
+{
+  switch(results.value)
+  {
+  case 0xFF629D: Serial.println(" NAHORU"); break;
+  case 0xFF22DD: Serial.println(" LEVA");    break;
+  case 0xFF02FD: Serial.println(" -OK-");    break;
+  case 0xFFC23D: Serial.println(" PRAVA");   break;
+  case 0xFFA857: Serial.println(" DOLU"); break;
+  case 0xFF6897: Serial.println(" 1"); digitalWrite(53, HIGH);   break;
+  case 0xFF9867: Serial.println(" 2");    break;
+  case 0xFFB04F: Serial.println(" 3");    break;
+  case 0xFF30CF: Serial.println(" 4");    break;
+  case 0xFF18E7: Serial.println(" 5");    break;
+  case 0xFF7A85: Serial.println(" 6");    break;
+  case 0xFF10EF: Serial.println(" 7");    break;
+  case 0xFF38C7: Serial.println(" 8");    break;
+  case 0xFF5AA5: Serial.println(" 9");    break;
+  case 0xFF42BD: Serial.println(" * (HVEZDA)");    break;
+  case 0xFF4AB5: Serial.println(" 0"); digitalWrite(53, LOW);   break;
+  case 0xFF52AD: Serial.println(" # (KRIZEK)");    break;
+  case 0xFFFFFFFF: Serial.println(" OPAKOVANI PREDCHOZIHO ");break;  
+  default:
+    Serial.println(" nezname tlacitko   ");
+  }
+  delay(500); // NEDÁVEJTE MENŠÍ PAUZU !!
+}
+/* ( THE END ) */
