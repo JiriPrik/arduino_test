@@ -1,0 +1,20 @@
+Zapojení na Arduino Mega:
+
+Arduino Mega:
+pin 19 - hnědá z IR
+pin 5V VCC - červená z IR
+pin GND - modrá z IR
+pin 53 - žlutá z LED
+pin GND - zelená z LED
+
+ 
+Infra čidlo:
+Pin: S - hnědá
+prostření pin - červená
+zbývající pin - modrá
+
+LED dioda
+
+- zelená - minus - GND na Arduinu
+- žlutá - plus - pin
+
